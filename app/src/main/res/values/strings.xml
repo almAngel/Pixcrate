@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Pixcrate</string>
+    <string name="api_base">https://p11410199117114115105118101.herokuapp.com</string>
+</resources>
