@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeNavButton"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:iconTint="@color/cardview_dark_background"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/uploadNavButton"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:iconTint="@color/cardview_dark_background"
+        android:title="Upload" />
+
+    <item
+        android:id="@+id/profileNavButton"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:iconTint="@color/cardview_dark_background"
+        android:title="Profile" />
+
+    <item
+        android:id="@+id/settingsNavButton"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:iconTint="@color/cardview_dark_background"
+        android:title="Settings" />
+
+</menu>

@@ -1,11 +1,13 @@
-package alm.android.pixcrate;
+package alm.android.pixcrate.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
 
@@ -16,9 +18,11 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.regex.Pattern;
 
+import alm.android.pixcrate.R;
 import alm.android.pixcrate.pojos.User;
 import alm.android.pixcrate.services.AuthService;
 import alm.android.pixcrate.tools.RequestHelper;
+import alm.android.pixcrate.tools.SessionManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -44,31 +48,24 @@ public class LoginActivity extends AppCompatActivity {
     private Pattern emailPattern;
     private Pattern passwordPattern;
     private SharedPreferences preferences;
+    private static final int REGISTERED_CODE = 201;
+    private static final int LOGGED_OUT_CODE = 11239;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
         // GET SharedPreferences
         preferences = getSharedPreferences("prefs", MODE_PRIVATE);
 
-        if(!preferences.getString("access_token", "").equals("")) {
-            String token = preferences.getString("access_token", "");
-            JWT parsedJWT = new JWT(token);
-            boolean isExpired = parsedJWT.isExpired(10);
+        passwordInput.getEditText().setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-            if(!isExpired) {
-                Intent goRegister = new Intent(LoginActivity.this, RegisterActivity.class);
-                LoginActivity.this.startActivity(goRegister);
-            }
-        }
 
         // REGEX VALIDATION INIT
         emailPattern = Pattern.compile(getResources().getString(R.string.email_regex));
         passwordPattern = Pattern.compile(getResources().getString(R.string.password_regex));
-        //passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
 
         thisContext = this;
 
@@ -89,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (isValidEmail && isValidPassword) {
                                 sbMessage = "Login in...";
-                                Snackbar.make(v, sbMessage, BaseTransientBottomBar.LENGTH_INDEFINITE).show();
+                                Snackbar.make(v, sbMessage, BaseTransientBottomBar.LENGTH_LONG).show();
 
                                 authService = RequestHelper.getHomeService(getResources().getString(R.string.api_base));
 
@@ -105,16 +102,20 @@ public class LoginActivity extends AppCompatActivity {
                                         //Log.d("Token: ", response.body().toString());
                                         if (response.body().status == 200) {
                                             preferences.edit().putString("access_token", response.body().access_token).apply();
-                                            //System.out.println(preferences.getString("access_token", ""));
-                                        } else {
-                                            sbMessage = "User not found";
+                                            // Navigate to HomeActivity
+                                            Intent goHome = new Intent(LoginActivity.this, HomeActivity.class);
+                                            startActivityForResult(goHome, 11239);
+                                            finish();
+                                            return;
+                                        } else if (response.body().status == 404 || response.body().status == 401) {
+                                            sbMessage = "Error: Invalid credentials";
                                             Snackbar.make(v, sbMessage, BaseTransientBottomBar.LENGTH_LONG).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<Token> call, Throwable t) {
-                                        Snackbar.make(v, t.getMessage(), BaseTransientBottomBar.LENGTH_LONG).show();
+                                        Snackbar.make(v, "No internet connection", BaseTransientBottomBar.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -136,10 +137,32 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Intent goRegister = new Intent(LoginActivity.this, RegisterActivity.class);
-                        LoginActivity.this.startActivity(goRegister);
+                        startActivityForResult(goRegister, REGISTERED_CODE);
                     }
                 }
         );
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        switch (requestCode) {
+            case REGISTERED_CODE:
+                if (resultCode == REGISTERED_CODE) {
+                    Snackbar.make(loginButton, "User registered", Snackbar.LENGTH_LONG).show();
+                }
+                else {
+                    Snackbar.make(loginButton, "User not registered", Snackbar.LENGTH_LONG).show();
+                }
+                break;
+            case LOGGED_OUT_CODE:
+                if(resultCode == LOGGED_OUT_CODE) {
+                    Snackbar.make(loginButton, "User logged out", Snackbar.LENGTH_LONG).show();
+                }
+                break;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

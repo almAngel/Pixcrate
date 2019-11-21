@@ -1,5 +1,6 @@
 package alm.android.pixcrate.services;
 
+import alm.android.pixcrate.pojos.DBResponse;
 import alm.android.pixcrate.pojos.User;
 import alm.android.pixcrate.pojos.Token;
 import retrofit2.Call;
@@ -12,5 +13,5 @@ public interface AuthService {
     Call<Token> getAccess(@Body User inputUser);
 
     @POST("/home/new")
-    Call<Token> register(@Body User inputUser);
+    Call<DBResponse> register(@Body User inputUser);
 }

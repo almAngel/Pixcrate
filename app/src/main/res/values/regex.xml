@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="email_regex">[a-zA-Z0-9._-]+@[a-z.]+[a-z]</string>
+    <string name="email_regex">[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]{1,}</string>
     <string name="password_regex">^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$</string>
+    <string name="username_regex">[a-zA-Z0-9\-\_\.]{6,30}$</string>
 </resources>

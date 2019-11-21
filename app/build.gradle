@@ -10,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -42,4 +43,8 @@ dependencies {
     implementation 'org.conscrypt:conscrypt-android:2.2.1'
     // https://mvnrepository.com/artifact/com.auth0/java-jwt
     implementation 'com.auth0.android:jwtdecode:1.4.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "com.android.support.constraint:constraint-layout:1.0.2"
 }
