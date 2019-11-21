@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import alm.android.pixcrate.R;
 import alm.android.pixcrate.adapters.PublicationAdapter;
 import alm.android.pixcrate.events.OnFeedUpdateEventListener;
+import alm.android.pixcrate.events.UpdatePulsator;
 import alm.android.pixcrate.pojos.Image;
 import alm.android.pixcrate.services.ImageService;
 import alm.android.pixcrate.tools.ResultFirer;
@@ -31,12 +31,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 public class FeedFragment extends Fragment implements OnFeedUpdateEventListener {
 
     private View fragmentView;
     private SharedPreferences preferences;
-    private ArrayList<Image> images = new ArrayList<Image>();
     private ImageService imageService;
     private String token;
 
@@ -51,7 +49,6 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
 
     private PublicationAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Image> finalResponse = new ArrayList<Image>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,6 +65,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
                     @Override
                     public Void call() {
@@ -93,6 +91,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
         mAdapter = new PublicationAdapter();
         feedListView.setAdapter(mAdapter);
 
+        // POPULATE ADAPTER
         loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
             @Override
             public Void call() {
@@ -101,19 +100,6 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
             }
         });
 
-    }
-
-    @Override
-    public void onFeedUpdate() {
-        Call<ArrayList<Image>> call = imageService.getAll(token);
-
-        loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
-            @Override
-            public Void call() {
-                mAdapter.setCollection(getResult());
-                return null;
-            }
-        });
     }
 
     public void loadImagesAsync(@Nullable ResultFirer<ArrayList<Image>> doAfter) {
@@ -122,13 +108,27 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
         call.enqueue(new Callback<ArrayList<Image>>() {
             @Override
             public void onResponse(Call<ArrayList<Image>> call, Response<ArrayList<Image>> response) {
-                doAfter.setResult(response.body());
-                doAfter.call();
+                try {
+                    doAfter.setResult(response.body());
+                    doAfter.call();
+                } catch (NullPointerException e) {}
             }
 
             @Override
             public void onFailure(Call<ArrayList<Image>> call, Throwable t) {
 
+            }
+        });
+    }
+
+    @Override
+    public void onFeedUpdate() {
+        // POPULATE ADAPTER
+        loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
+            @Override
+            public Void call() {
+                mAdapter.setCollection(getResult());
+                return null;
             }
         });
     }

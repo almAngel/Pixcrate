@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "alm.android.pixcrate"
         minSdkVersion 15
-        targetSdkVersion 29
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -47,4 +47,6 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation "com.android.support.constraint:constraint-layout:1.0.2"
+    implementation 'com.squareup.retrofit2:converter-scalars:2.6.2'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
 }

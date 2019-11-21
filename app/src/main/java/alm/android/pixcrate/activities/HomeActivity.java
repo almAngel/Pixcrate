@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.auth0.android.jwt.JWT;
@@ -27,19 +28,28 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.bottomNav)
     protected BottomNavigationView bottomNav;
 
-    public static final Fragment homeFragment = new FeedFragment();
-    public static final Fragment uploadFragment = new UploadFragment();
-    public static final Fragment settingsFragment = new SettingsFragment();
+    public static Fragment homeFragment;
+    public static Fragment uploadFragment;
+    public static Fragment settingsFragment;
 
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment activeFragment = homeFragment;
+    Fragment activeFragment;
     private SharedPreferences preferences;
+
+    private static final int UPLOAD_IMAGE = 892357;
+    private static final int UPLOAD_OK = 201;
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
+        homeFragment = new FeedFragment();
+        uploadFragment = new UploadFragment();
+        settingsFragment = new SettingsFragment();
+
+        activeFragment = homeFragment;
 
         // GET SharedPreferences
         preferences = getSharedPreferences("prefs", MODE_PRIVATE);
@@ -50,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.frameLayout, settingsFragment, "3").hide(settingsFragment).commit();
         fm.beginTransaction().add(R.id.frameLayout, uploadFragment, "2").hide(uploadFragment).commit();
         fm.beginTransaction().add(R.id.frameLayout, homeFragment, "1").commit();
-        bottomNav.setSelectedItemId(R.id.homeNavButton);
+        //bottomNav.setSelectedItemId(R.id.homeNavButton);
 
         bottomNav.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -84,6 +94,17 @@ public class HomeActivity extends AppCompatActivity {
                 }
         );
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == UPLOAD_IMAGE) {
+            if(resultCode == UPLOAD_OK) {
+
+            }
+        }
     }
 
 }

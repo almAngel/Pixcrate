@@ -14,22 +14,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import alm.android.pixcrate.R;
-import alm.android.pixcrate.activities.HomeActivity;
-import alm.android.pixcrate.activities.fragments.FeedFragment;
 import alm.android.pixcrate.customviews.PublicationHeader;
-import alm.android.pixcrate.events.UpdatePulsator;
 import alm.android.pixcrate.pojos.DefaultResponse;
 import alm.android.pixcrate.pojos.Image;
 import alm.android.pixcrate.services.ImageService;
@@ -37,6 +34,7 @@ import alm.android.pixcrate.tools.RequestHelper;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.PublicationViewHolder> {
 
@@ -56,6 +54,11 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
     public void removeItem(int position) {
         this.imgList.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public void addItem(Image image) {
+        this.imgList.add(image);
+        notifyItemInserted(this.imgList.size());
     }
 
     @NonNull
@@ -137,12 +140,6 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
 
         private final MenuItem.OnMenuItemClickListener onContextMenu = new MenuItem.OnMenuItemClickListener() {
 
-            /* DEAD
-            Fragment receiver = HomeActivity.homeFragment;
-            final UpdatePulsator pulsator = new UpdatePulsator();
-
-             */
-
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
@@ -160,11 +157,6 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
                                 if(response.body().getStatus() == 200) {
                                     removeItem(position);
                                     Snackbar.make(itemView, "Image deleted successfully", BaseTransientBottomBar.LENGTH_LONG).show();
-                                    /*
-                                    pulsator.addListener((FeedFragment)receiver);
-                                    pulsator.emitPulse();
-                                    */
-
                                 } else {
                                     Snackbar.make(itemView, response.body().getMsg(), BaseTransientBottomBar.LENGTH_LONG).show();
                                 }
@@ -182,6 +174,5 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         };
 
     }
-
 
 }
