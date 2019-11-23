@@ -128,7 +128,7 @@ public class UploadFragment extends Fragment {
                 public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                     if(response.body().getStatus() == 201) {
                         pulsator.addListener(fragment);
-                        pulsator.emitPulse();
+                        pulsator.emitPulse(9097);
                         Snackbar.make(fragmentView, response.body().getMsg(), BaseTransientBottomBar.LENGTH_LONG).show();
                         progressBar.setVisibility(View.INVISIBLE);
                     } else {

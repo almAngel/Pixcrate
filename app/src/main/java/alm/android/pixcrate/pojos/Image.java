@@ -2,6 +2,8 @@ package alm.android.pixcrate.pojos;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 
 public class Image implements Serializable {
@@ -15,9 +17,14 @@ public class Image implements Serializable {
     @SerializedName("visibility")
     private String visibility;
 
-    public Image(String id, String url, String description, String visibility) {
+    public Image(@Nullable String id, @Nullable String url, String description, String visibility) {
         this.id = id;
         this.url = url;
+        this.description = description;
+        this.visibility = visibility;
+    }
+
+    public Image(String description, String visibility) {
         this.description = description;
         this.visibility = visibility;
     }

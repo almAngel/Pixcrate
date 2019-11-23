@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +27,10 @@ import com.google.gson.GsonBuilder;
 import java.util.ArrayList;
 
 import alm.android.pixcrate.R;
+import alm.android.pixcrate.activities.HomeActivity;
+import alm.android.pixcrate.activities.fragments.FeedFragment;
 import alm.android.pixcrate.customviews.PublicationHeader;
+import alm.android.pixcrate.events.UpdatePulsator;
 import alm.android.pixcrate.pojos.DefaultResponse;
 import alm.android.pixcrate.pojos.Image;
 import alm.android.pixcrate.services.ImageService;
@@ -61,6 +65,15 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         notifyItemInserted(this.imgList.size());
     }
 
+    public void modifyItem(Image image, int position) {
+        this.imgList.set(position, image);
+        notifyItemChanged(position, image);
+    }
+
+    public ArrayList<Image> getImgList() {
+        return imgList;
+    }
+
     @NonNull
     @Override
     public PublicationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -86,14 +99,6 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         holder.publicationDesc.setText(imgList.get(position).getDescription());
         holder.id = imgList.get(position).getId();
         holder.position = position;
-
-        holder.publicationDesc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.publicationDesc.setVisibility(View.INVISIBLE);
-            }
-        });
-
     }
 
     @Override
@@ -101,7 +106,7 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         return imgList.size();
     }
 
-    protected class PublicationViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class PublicationViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         PublicationHeader publicationHeader;
         ImageView publicationImage;
@@ -146,12 +151,16 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
                 switch (item.getItemId()) {
                     case 1:
 
+                        FeedFragment feedFragment = (FeedFragment) HomeActivity.homeFragment;
+                        UpdatePulsator up = new UpdatePulsator();
+                        up.addListener(feedFragment);
+                        up.emitPulse(7865, imgList.get(position), position, null, null);
                         break;
 
                     case 2:
-                        Call<DefaultResponse> call = imageService.delete(token, id);
+                        Call<DefaultResponse> deleteCall = imageService.delete(token, id);
 
-                        call.enqueue(new Callback<DefaultResponse>() {
+                        deleteCall.enqueue(new Callback<DefaultResponse>() {
                             @Override
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 if(response.body().getStatus() == 200) {

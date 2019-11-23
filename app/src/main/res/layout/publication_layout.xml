@@ -41,6 +41,7 @@
 
     <EditText
         android:id="@+id/publication_description"
+        style="@style/Widget.AppCompat.TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -48,8 +49,12 @@
         android:gravity="left"
         android:padding="30dp"
         android:text="Sample description"
-        android:clickable="true"
-        android:focusable="true"
+        android:enabled="false"
+        android:textColor="@color/cardview_dark_background"
+        android:inputType="textMultiLine"
+        android:imeOptions="actionDone"
+        android:maxLength="420"
+
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

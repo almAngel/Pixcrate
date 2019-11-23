@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     public static Fragment settingsFragment;
 
     final FragmentManager fm = getSupportFragmentManager();
-    Fragment activeFragment;
+    public static Fragment activeFragment;
     private SharedPreferences preferences;
 
     private static final int UPLOAD_IMAGE = 892357;
@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         fm.beginTransaction().add(R.id.frameLayout, settingsFragment, "3").hide(settingsFragment).commit();
         fm.beginTransaction().add(R.id.frameLayout, uploadFragment, "2").hide(uploadFragment).commit();
         fm.beginTransaction().add(R.id.frameLayout, homeFragment, "1").commit();
-        //bottomNav.setSelectedItemId(R.id.homeNavButton);
+        bottomNav.setSelectedItemId(R.id.homeNavButton);
 
         bottomNav.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -97,14 +97,20 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        /*
+        homeFragment = new FeedFragment();
+        uploadFragment = new UploadFragment();
+        settingsFragment = new SettingsFragment();
+        */
+
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == UPLOAD_IMAGE) {
-            if(resultCode == UPLOAD_OK) {
-
-            }
-        }
     }
 
 }
