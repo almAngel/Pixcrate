@@ -25,6 +25,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import alm.android.pixcrate.R;
 import alm.android.pixcrate.activities.HomeActivity;
@@ -39,6 +41,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.converter.gson.GsonConverterFactory;
+
+import static java.util.Collections.reverse;
 
 public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.PublicationViewHolder> {
 
@@ -62,7 +66,7 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
 
     public void addItem(Image image) {
         this.imgList.add(image);
-        notifyItemInserted(this.imgList.size());
+        notifyItemInserted(0);
     }
 
     public void modifyItem(Image image, int position) {
@@ -165,6 +169,7 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 if(response.body().getStatus() == 200) {
                                     removeItem(position);
+                                    setCollection(imgList);
                                     Snackbar.make(itemView, "Image deleted successfully", BaseTransientBottomBar.LENGTH_LONG).show();
                                 } else {
                                     Snackbar.make(itemView, response.body().getMsg(), BaseTransientBottomBar.LENGTH_LONG).show();

@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +35,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import alm.android.pixcrate.R;
 import alm.android.pixcrate.activities.HomeActivity;
@@ -88,6 +90,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
 
         token = preferences.getString("access_token", "");
 
+        //Orientation
         layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true);
         feedListView.setLayoutManager(layoutManager);
 
@@ -151,6 +154,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                 @Override
                 public Void call() {
                     mAdapter.addItem(getResult().get(getResult().size()-1));
+                    mAdapter.setCollection(getResult());
                     return null;
                 }
             });
@@ -170,7 +174,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
 
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.toggleSoftInputFromWindow(v.getWindowToken(), InputMethodManager.SHOW_FORCED, 0);
-            nestedScrollView.scrollTo(0, descriptionEditText.getBottom());
+            nestedScrollView.scrollTo(0, descriptionEditText.getTop());
 
             descriptionEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
@@ -184,7 +188,9 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                             @Override
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 if (response.body().getStatus() == 200) {
+
                                     mAdapter.modifyItem(img, (Integer) args[2]);
+                                    //mAdapter.setCollection(mAdapter.getImgList());
                                     descriptionEditText.setEnabled(false);
                                     descriptionEditText.clearFocus();
                                     nestedScrollView.fullScroll(View.FOCUS_UP);
@@ -193,7 +199,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
 
                                     //SEND ANOTHER PULSE TO ITSELF (WE NEED TO PASS IN THE RESULTS AGAIN
                                     new UpdatePulsator().addListener((FeedFragment) HomeActivity.homeFragment).emitPulse(
-                                            args[0], img, args[2], 200, img.getDescription());
+                                            7865, img, args[2], 200, img.getDescription());
                                     return;
                                 } else {
                                     Snackbar.make(feedListView, response.body().getMsg(), BaseTransientBottomBar.LENGTH_LONG).show();
@@ -228,7 +234,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                             imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
                         }
                         // IF USER CHANGES MENU TAB
-                        else if(HomeActivity.activeFragment.getClass().getName() != FeedFragment.class.getName()) {
+                        else if (HomeActivity.activeFragment.getClass().getName() != FeedFragment.class.getName()) {
                             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                         }
 
@@ -256,11 +262,13 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                 loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
                     @Override
                     public Void call() {
-                        mAdapter.modifyItem((Image)args[1], (Integer) args[2]);
-                        //mAdapter.setCollection(getResult());
+
+                        mAdapter.setCollection(getResult());
                         return null;
                     }
                 });
+                //System.out.println(args[1]);
+                //mAdapter.modifyItem((Image)args[1], (Integer) args[2]);
 
                 swipeRefreshLayout.setRefreshing(false);
             }
