@@ -91,7 +91,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
         token = preferences.getString("access_token", "");
 
         //Orientation
-        layoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, true);
+        layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, true);
         feedListView.setLayoutManager(layoutManager);
 
         mAdapter = new PublicationAdapter();
@@ -112,7 +112,6 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                 loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
                     @Override
                     public Void call() {
-                        //mAdapter.modifyItem((Image)args[1], (Integer) args[2]);
                         mAdapter.setCollection(getResult());
                         return null;
                     }
@@ -200,6 +199,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                                     //SEND ANOTHER PULSE TO ITSELF (WE NEED TO PASS IN THE RESULTS AGAIN
                                     new UpdatePulsator().addListener((FeedFragment) HomeActivity.homeFragment).emitPulse(
                                             7865, img, args[2], 200, img.getDescription());
+
                                     return;
                                 } else {
                                     Snackbar.make(feedListView, response.body().getMsg(), BaseTransientBottomBar.LENGTH_LONG).show();
@@ -255,26 +255,6 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
             });
 
         }
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
-                    @Override
-                    public Void call() {
-
-                        mAdapter.setCollection(getResult());
-                        return null;
-                    }
-                });
-                //System.out.println(args[1]);
-                //mAdapter.modifyItem((Image)args[1], (Integer) args[2]);
-
-                swipeRefreshLayout.setRefreshing(false);
-            }
-
-        });
-
     }
 
 }

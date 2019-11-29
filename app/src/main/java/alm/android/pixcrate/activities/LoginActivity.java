@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
 
         passwordInput.getEditText().setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-
         // REGEX VALIDATION INIT
         emailPattern = Pattern.compile(getResources().getString(R.string.email_regex));
         passwordPattern = Pattern.compile(getResources().getString(R.string.password_regex));

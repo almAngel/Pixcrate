@@ -97,17 +97,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        /*
-        homeFragment = new FeedFragment();
-        uploadFragment = new UploadFragment();
-        settingsFragment = new SettingsFragment();
-        */
-
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 

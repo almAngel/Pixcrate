@@ -10,6 +10,8 @@ public class DefaultResponse implements Serializable {
     private String msg;
     @SerializedName("status")
     private Integer status;
+    @SerializedName("access_token")
+    private String token;
 
     public DefaultResponse(String msg, Integer status) {
         this.msg = msg;
@@ -32,4 +34,11 @@ public class DefaultResponse implements Serializable {
         this.status = status;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
