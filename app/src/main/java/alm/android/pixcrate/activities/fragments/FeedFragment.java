@@ -35,7 +35,10 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import alm.android.pixcrate.R;
 import alm.android.pixcrate.activities.HomeActivity;
@@ -106,17 +109,18 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
             }
         });
 
+        // REFRESH IMAGE LIST
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
                     @Override
-                    public Void call() {
-                        mAdapter.setCollection(getResult());
+                    public synchronized Void call() {
+                        mAdapter.setImgList(getResult());
                         return null;
                     }
                 });
-
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -152,8 +156,8 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
             loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
                 @Override
                 public Void call() {
-                    mAdapter.addItem(getResult().get(getResult().size()-1));
-                    mAdapter.setCollection(getResult());
+                    mAdapter.addItem(getResult().get(getResult().size() - 1), getResult().size());
+                    //mAdapter.setCollection(getResult());
                     return null;
                 }
             });
@@ -187,14 +191,12 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                             @Override
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 if (response.body().getStatus() == 200) {
+                                    mAdapter.modifyItem(img, mAdapter.getImgList().indexOf(img));
 
-                                    mAdapter.modifyItem(img, (Integer) args[2]);
-                                    //mAdapter.setCollection(mAdapter.getImgList());
                                     descriptionEditText.setEnabled(false);
                                     descriptionEditText.clearFocus();
                                     nestedScrollView.fullScroll(View.FOCUS_UP);
                                     imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
-
 
                                     //SEND ANOTHER PULSE TO ITSELF (WE NEED TO PASS IN THE RESULTS AGAIN
                                     new UpdatePulsator().addListener((FeedFragment) HomeActivity.homeFragment).emitPulse(

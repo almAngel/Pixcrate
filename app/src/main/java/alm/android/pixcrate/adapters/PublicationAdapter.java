@@ -54,6 +54,10 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
     public PublicationAdapter() {
     }
 
+    public void setImgList(ArrayList<Image> newList) {
+        this.imgList = newList;
+    }
+
     public void setCollection(ArrayList<Image> newList) {
         this.imgList = newList;
         notifyDataSetChanged();
@@ -64,9 +68,9 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
         notifyItemRemoved(position);
     }
 
-    public void addItem(Image image) {
+    public void addItem(Image image, int position) {
         this.imgList.add(image);
-        notifyItemInserted(0);
+        notifyItemInserted(position);
     }
 
     public void modifyItem(Image image, int position) {
@@ -169,7 +173,7 @@ public class PublicationAdapter extends RecyclerView.Adapter<PublicationAdapter.
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 if(response.body().getStatus() == 200) {
                                     removeItem(position);
-                                    setCollection(imgList);
+                                    //setCollection(imgList);
                                     Snackbar.make(itemView, "Image deleted successfully", BaseTransientBottomBar.LENGTH_LONG).show();
                                 } else {
                                     Snackbar.make(itemView, response.body().getMsg(), BaseTransientBottomBar.LENGTH_LONG).show();
