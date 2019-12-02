@@ -127,8 +127,10 @@ public class UploadFragment extends Fragment {
                 @Override
                 public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                     if(response.body().getStatus() == 201) {
+
+                        Image img = new Image("", "", "", "public");
                         pulsator.addListener(fragment);
-                        pulsator.emitPulse(9097);
+                        pulsator.emitPulse(9097, img);
                         Snackbar.make(fragmentView, response.body().getMsg(), BaseTransientBottomBar.LENGTH_LONG).show();
                         progressBar.setVisibility(View.INVISIBLE);
                     } else {
@@ -151,3 +153,4 @@ public class UploadFragment extends Fragment {
 
     }
 }
+

@@ -94,10 +94,12 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
         token = preferences.getString("access_token", "");
 
         //Orientation
-        layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, true);
+       // layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, true);
+        layoutManager = new LinearLayoutManager(getActivity());
+
         feedListView.setLayoutManager(layoutManager);
 
-        mAdapter = new PublicationAdapter();
+        mAdapter = new PublicationAdapter() ;
         feedListView.setAdapter(mAdapter);
 
         // POPULATE ADAPTER
@@ -117,7 +119,9 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                 loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
                     @Override
                     public synchronized Void call() {
-                        mAdapter.setImgList(getResult());
+                        // CALLBACK -> SIMPLEMENTE RECARGAMOS LISTA DE ITEMS
+                        //mAdapter.setImgList(getResult());
+                        mAdapter.setCollection(getResult());
                         return null;
                     }
                 });
@@ -135,7 +139,9 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
             @Override
             public void onResponse(Call<ArrayList<Image>> call, Response<ArrayList<Image>> response) {
                 try {
-                    doAfter.setResult(response.body());
+                    ArrayList<Image> arr = response.body() ;
+                    Collections.reverse(arr) ;
+                    doAfter.setResult(arr);
                     doAfter.call();
                 } catch (NullPointerException e) {
                 }
@@ -156,8 +162,9 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
             loadImagesAsync(new ResultFirer<ArrayList<Image>>() {
                 @Override
                 public Void call() {
-                    mAdapter.addItem(getResult().get(getResult().size() - 1), getResult().size());
-                    //mAdapter.setCollection(getResult());
+                    // CALLBACK -> AVISAR A RECYCLERVIEW QUE HAN CAMBIADO ITEMS
+                    //mAdapter.addItem((Image) args[1], mAdapter.getImgList().size());
+                    mAdapter.setCollection(getResult());
                     return null;
                 }
             });
@@ -191,7 +198,7 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
                             @Override
                             public void onResponse(Call<DefaultResponse> call, Response<DefaultResponse> response) {
                                 if (response.body().getStatus() == 200) {
-                                    mAdapter.modifyItem(img, mAdapter.getImgList().indexOf(img));
+                                    mAdapter.modifyItem(img, (Integer) args[2]);
 
                                     descriptionEditText.setEnabled(false);
                                     descriptionEditText.clearFocus();
