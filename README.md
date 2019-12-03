@@ -29,33 +29,7 @@ Está desarrollada con **Ionic 4** para el front y **NodeJS**, **Express**, **Mo
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
-Éste es el aspecto de la misma (versión actual):
-
-<h2>Login y Registro</h2>
-<div>
-  <img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/login.png" alt="login-page" width="250"/>
-  <img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/register.png" alt="register-page" width="250"/>
-</div>
-<h2>Dentro de la app</h2>
-<div>
-  <img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/feed.png" alt="feed-page" width="250"/>
-  <img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/upload.png" alt="upload-page" width="250"/>
-  <img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/settings.png" alt="settings-page" width="250"/>
-  <img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/contextual_menu.png" alt="cm-feed-page" width="250"/>
-  <img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/logout_alert.png" alt="al-settings-page" width="250"/>
-</div>
-
-## Detalles de desarrollo (Alpha 1)
-
-- Framework propio creado desde cero para desarrollo de APIs basadas en **MEAN** stack. (Notificar para ver repositorio)
-
-- Incorpora un sistema de autenticación con **_JWT_**, que se encargará de las sesiones y de verificar que sólo tú puedas manipular tus imágenes, además de contar con encriptado **_hash+salt_** para tu contraseña.
-
-- También cuenta con una versión Android nativo (público proximamente).
-
-DIAGRAMA DE BASE DE DATOS (NO RELACIONAL):
-
-<img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/Mongo.png" alt="mongo-diag" width="400"/>
+[![Documentacion](https://freeiconshop.com/wp-content/uploads/edd/download-flat.png)]](https://drive.google.com/file/d/1wclNhW6_EBPpYqgZW-VR2HJJJYuUJQDH/view?usp=sharing)
 
 ## Guia de uso en video
 
