@@ -20,7 +20,9 @@ Está desarrollada con **Android** para el front y **NodeJS**, **Express**, **Mo
 5. Ahora podemos volver al Feed y tocar el botón con los tres puntos en vertical de cualquiera de nuestras publicaciones, mostrando un menú contextual con las opciones **EDIT** y **DELETE**.
 
 - EDIT: Podremos editar la descripción de nuestra publicación. Una vez escrita sólo hemos de pulsar **_ENTER_**
+
 -> Si se cancela la edición, Pixcrate no contará con la descripción escrita.
+
 -> Si se cambia de tab se cancelará la edición de la imágen.
 
 - DELETE: Una vez pulsado este botón, se eliminará la imagen o publicación de la vista y de la base de datos. **No aparecerá más en nuestra lista**
@@ -61,6 +63,6 @@ Está desarrollada con **Android** para el front y **NodeJS**, **Express**, **Mo
 <p>email: example@example.com</p>
 <p>pass: Example123</p>
 
-* ALTERNATIVAMENTE PODEMOS CREAR UNO NUEVO EN LA ACTIVIDAD DE REGISTRO
+-> ALTERNATIVAMENTE PODEMOS CREAR UNO NUEVO EN LA ACTIVIDAD DE REGISTRO
 
 NOTA: SI A LA HORA DE SUBIR O EDITAR UNA IMAGEN, LA MISMA CAMBIA DE POSICIÓN NO SE CONSIDERA UN ERROR, YA QUE NO SE REALIZA NINGUNA REORDENACIÓN DE LOS ELEMENTOS DE LA LISTA, Y PUEDE SER QUE POR CRITERIOS DE MONGODB LAS MISMAS CAMBIEN DE POSICIÓN.
