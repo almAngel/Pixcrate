@@ -33,7 +33,7 @@ Está desarrollada con **Ionic 4** para el front y **NodeJS**, **Express**, **Mo
 (https://drive.google.com/file/d/1wclNhW6_EBPpYqgZW-VR2HJJJYuUJQDH/view?usp=sharing)
 
 ## Guia de uso en video
-### _Está hecha sobre la aplicación en Ionic, pero no hay muchas diferencias entre ellas, a parte de algunas diferencias estéticas_
+### _Está hecha sobre la aplicación en Ionic, pero no hay muchas diferencias entre ellas_
 
 [![VIDEOGUIA](http://i3.ytimg.com/vi/4oswZ0sX7V8/maxresdefault.jpg)](https://youtu.be/4oswZ0sX7V8)
 
