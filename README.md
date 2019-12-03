@@ -5,7 +5,7 @@
 ## ¿Qué es Pixcrate?
 Pixcrate pretende ser una red social para compartir imágenes con nuestros seguidores, haciendo hincapié en la usabilidad y un *feel* más humano, tanto en sus interfaces de usuario como en la interacción social dentro de la app.
 
-Está desarrollada con **Ionic 4** para el front y **NodeJS**, **Express**, **MongoDB** y **AWS S3** en el backend (conocido como **MEAN** stack)
+Está desarrollada con **Android** para el front y **NodeJS**, **Express**, **MongoDB** y **AWS S3** en el backend (conocido como **MEAN** stack)
 
 ## Guia de uso básica
 
