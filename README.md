@@ -52,6 +52,10 @@ Está desarrollada con **Android** para el front y **NodeJS**, **Express**, **Mo
 ## Documentación
 (https://drive.google.com/file/d/1wclNhW6_EBPpYqgZW-VR2HJJJYuUJQDH/view?usp=sharing)
 
+DIAGRAMA DE BASE DE DATOS (NO RELACIONAL):
+
+<img src="https://github.com/almAngel/ion-pixcrate/blob/master/imagenes/Mongo.png" alt="mongo-diag" width="400"/>
+
 ## Guia de uso en video
 ### _Está hecha sobre la aplicación en Ionic, pero no hay muchas diferencias entre ellas_
 
