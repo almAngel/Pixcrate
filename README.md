@@ -29,7 +29,8 @@ Está desarrollada con **Ionic 4** para el front y **NodeJS**, **Express**, **Mo
 
 -----------------------------------------------------------------------------------------------------------------------------------
 
-[![Documentacion](https://freeiconshop.com/wp-content/uploads/edd/download-flat.png)]](https://drive.google.com/file/d/1wclNhW6_EBPpYqgZW-VR2HJJJYuUJQDH/view?usp=sharing)
+## Documentación
+(https://drive.google.com/file/d/1wclNhW6_EBPpYqgZW-VR2HJJJYuUJQDH/view?usp=sharing)
 
 ## Guia de uso en video
 
