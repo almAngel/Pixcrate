@@ -1,6 +1,10 @@
 package alm.android.pixcrate.activities.fragments;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -25,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +42,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +52,7 @@ import alm.android.pixcrate.activities.HomeActivity;
 import alm.android.pixcrate.adapters.PublicationAdapter;
 import alm.android.pixcrate.events.OnFeedUpdateEventListener;
 import alm.android.pixcrate.events.UpdatePulsator;
+import alm.android.pixcrate.events.UploadObservable;
 import alm.android.pixcrate.pojos.DefaultResponse;
 import alm.android.pixcrate.pojos.Image;
 import alm.android.pixcrate.services.ImageService;
@@ -56,12 +64,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FeedFragment extends Fragment implements OnFeedUpdateEventListener {
+public class FeedFragment extends Fragment implements OnFeedUpdateEventListener, Observer {
 
     private View fragmentView;
     private SharedPreferences preferences;
     private ImageService imageService;
     private String token;
+    private Context fragmentContext;
 
     @BindView(R.id.feed_publicationList)
     protected RecyclerView feedListView;
@@ -79,6 +88,10 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_feed, container, false);
         ButterKnife.bind(this, fragmentView);
+        fragmentContext = getContext();
+
+        // UPLOAD OBSERVABLE
+        UploadObservable.get_instance().addObserver(this);
 
         return fragmentView;
     }
@@ -152,6 +165,12 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
 
             }
         });
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        observableNotification("El observable funciona correctamente desde " +  this.getClass().getSimpleName());
+        System.out.println("El observable funciona correctamente.");
     }
 
     @Override
@@ -266,5 +285,36 @@ public class FeedFragment extends Fragment implements OnFeedUpdateEventListener 
         }
     }
 
+    private void observableNotification(String messageContent) {
+        NotificationManager notificationManager = (NotificationManager) fragmentContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("OBSERVABLE_CHANNEL",
+                    "OBSERVABLE_CHANNEL",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("Channel for notifications");
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                fragmentContext,
+                "OBSERVABLE_CHANNEL"
+        )
+                .setSmallIcon(R.drawable.ic_add_a_photo_black_24dp)
+                .setContentTitle("Observable")
+                .setContentText(messageContent)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        Intent intent = new Intent(fragmentContext, HomeActivity.class);
+        PendingIntent pi = PendingIntent.getActivity(
+                fragmentContext,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentIntent(pi);
+        notificationManager.notify(575, builder.build());
+    }
 }
 
